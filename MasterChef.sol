@@ -1188,6 +1188,7 @@ contract MilkToken is BEP20('Milk Token', 'MILK') {
         require(n < 2**32, errorMessage);
         return uint32(n);
     }
+		
 
     function getChainId() internal pure returns (uint) {
         uint256 chainId;
