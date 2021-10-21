@@ -1,27 +1,23 @@
 /**
- *Submitted for verification at BscScan.com on 2021-07-31
-*/
-
-/**
 
                                       /;    ;\
                                    __  \\____//
                                   /{_\_/   `'\____
                                   \___   (o)  (o  }
-       _____________________________/          :--'
+       _____________________________/          :--'  
    ,-,'`@@@@@@@@       @@@@@@         \_    `__\
   ;:(  @@@@@@@@@        @@@             \___(o'o)
-  :: )  @@@@          @@@@@@        ,'@@(  `===='
+  :: )  @@@@          @@@@@@        ,'@@(  `===='       
   :: : @@@@@:          @@@@         `@@@:
   :: \  @@@@@:       @@@@@@@)    (  '@@@'
   ;; /\      /`,    @@@@@@@@@\   :@@@@@)
   ::/  )    {_----------------:  :~`,~~;
  ;;'`; :   )                  :  / `; ;
-;;;; : :   ;                  :  ;  ; :
+;;;; : :   ;                  :  ;  ; :              
 `'`' / :  :                   :  :  : :
     )_ \__;      ";"          :_ ;  \_\       `,','
     :__\  \    * `,'*         \  \  :  \   *  8`;'*  *
-        `^'     \ :/           `^'  `-^-'   \v/ :  \/
+        `^'     \ :/           `^'  `-^-'   \v/ :  \/ 
 */
 
 
@@ -545,7 +541,7 @@ abstract contract Ownable is Context {
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
     constructor () {
-        _owner = 0x4082073420DC8099E39A5C178a433231FE7CD2F6;
+        _owner = 0x9598e5E8abA863337D577647d15d2d667A356A91;
         emit OwnershipTransferred(address(0), _owner);
     }
 
@@ -802,34 +798,34 @@ contract CashCowToken is Context, IERC20, Ownable {
     mapping (address => bool) private _isExcluded;
     address[] private _excluded;
 
-    address private _charityWalletAddress = 0x4082073420DC8099E39A5C178a433231FE7CD2F6;   //Dev&Marketing Wallet
-
+    address private _charityWalletAddress = 0x9598e5E8abA863337D577647d15d2d667A356A91;   //Dev&Marketing Wallet
+   
     uint256 private constant MAX = ~uint256(0);
     uint256 private _tTotal = 2000000  * 10**9;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
     uint256 private _tFeeTotal;
 
     string private _name = "CashCow";
-    string private _symbol = "COW";
-    uint8 private _decimals = 9;
-
+    string private _symbol = "COW_Test18";
+    uint8 private _decimals = 18;
+    
     uint256 public _taxFee = 4;
     uint256 private _previousTaxFee = _taxFee;
-
-    uint256 public _charityFee = 2; // we dont donate to charity, we will use this for marketing and development!!!!
+    
+    uint256 public _charityFee = 3; // we dont donate to charity, we will use this for marketing and development!!!!
     uint256 private _previousCharityFee = _charityFee;
-    uint256 public _liquidityFee = 4;
+    uint256 public _liquidityFee = 3;
     uint256 private _previousLiquidityFee = _liquidityFee;
 
     IUniswapV2Router02 public uniswapV2Router;
     address public uniswapV2Pair;
-
+    
     bool inSwapAndLiquify;
     bool public swapAndLiquifyEnabled = true;
-
+    
     uint256 public _maxTxAmount = 50000  * 10**9;
     uint256 private numTokensSellToAddToLiquidity = 100  * 10**9;
-
+    
     event MinTokensBeforeSwapUpdated(uint256 minTokensBeforeSwap);
     event SwapAndLiquifyEnabledUpdated(bool enabled);
     event SwapAndLiquify(
@@ -837,21 +833,28 @@ contract CashCowToken is Context, IERC20, Ownable {
         uint256 ethReceived,
         uint256 tokensIntoLiqudity
     );
-
+    
     modifier lockTheSwap {
         inSwapAndLiquify = true;
         _;
         inSwapAndLiquify = false;
     }
-
+    
     constructor () {
+        /**
+        Current PancakeSwap Router Address Testnet:
+        0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F
+        
+        Current PancakeSwap Router Address live:
+        0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F
+        */
 
         _rOwned[owner()] = _rTotal;
-
+        
         //exclude owner and this contract from fee
         _isExcludedFromFee[owner()] = true;
         _isExcludedFromFee[address(this)] = true;
-
+        
         emit Transfer(address(0), owner(), _tTotal);
     }
 
@@ -941,7 +944,7 @@ contract CashCowToken is Context, IERC20, Ownable {
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
-        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
+        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);        
         _takeLiquidity(tLiquidity);
         _takeCharity(tCharity);
         _reflectFee(rFee, tFee);
@@ -952,7 +955,7 @@ contract CashCowToken is Context, IERC20, Ownable {
         swapAndLiquifyEnabled = _enabled;
         emit SwapAndLiquifyEnabledUpdated(_enabled);
     }
-
+    
      //to recieve ETH from uniswapV2Router when swaping
     receive() external payable {}
 
@@ -991,7 +994,7 @@ contract CashCowToken is Context, IERC20, Ownable {
 
     function _getCurrentSupply() private view returns(uint256, uint256) {
         uint256 rSupply = _rTotal;
-        uint256 tSupply = _tTotal;
+        uint256 tSupply = _tTotal;      
         for (uint256 i = 0; i < _excluded.length; i++) {
             if (_rOwned[_excluded[i]] > rSupply || _tOwned[_excluded[i]] > tSupply) return (_rTotal, _tTotal);
             rSupply = rSupply.sub(_rOwned[_excluded[i]]);
@@ -1000,7 +1003,7 @@ contract CashCowToken is Context, IERC20, Ownable {
         if (rSupply < _rTotal.div(_tTotal)) return (_rTotal, _tTotal);
         return (rSupply, tSupply);
     }
-
+    
     function _takeLiquidity(uint256 tLiquidity) private {
         uint256 currentRate =  _getRate();
         uint256 rLiquidity = tLiquidity.mul(currentRate);
@@ -1008,7 +1011,7 @@ contract CashCowToken is Context, IERC20, Ownable {
         if(_isExcluded[address(this)])
             _tOwned[address(this)] = _tOwned[address(this)].add(tLiquidity);
     }
-
+    
     function _takeCharity(uint256 tCharity) private {
         uint256 currentRate =  _getRate();
         uint256 rCharity = tCharity.mul(currentRate);
@@ -1016,7 +1019,7 @@ contract CashCowToken is Context, IERC20, Ownable {
         if(_isExcluded[_charityWalletAddress])
             _tOwned[_charityWalletAddress] = _tOwned[_charityWalletAddress].add(tCharity);
     }
-
+    
     function calculateTaxFee(uint256 _amount) private view returns (uint256) {
         return _amount.mul(_taxFee).div(
             10**2
@@ -1034,25 +1037,25 @@ contract CashCowToken is Context, IERC20, Ownable {
             10**2
         );
     }
-
+    
     function removeAllFee() private {
         if(_taxFee == 0 && _liquidityFee == 0) return;
-
+        
         _previousTaxFee = _taxFee;
         _previousCharityFee = _charityFee;
         _previousLiquidityFee = _liquidityFee;
-
+        
         _taxFee = 0;
         _charityFee = 0;
         _liquidityFee = 0;
     }
-
+    
     function restoreAllFee() private {
         _taxFee = _previousTaxFee;
         _charityFee = _previousCharityFee;
         _liquidityFee = _previousLiquidityFee;
     }
-
+    
     function _approve(address owner, address spender, uint256 amount) private {
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
@@ -1077,12 +1080,12 @@ contract CashCowToken is Context, IERC20, Ownable {
         // also, don't get caught in a circular liquidity event.
         // also, don't swap & liquify if sender is uniswap pair.
         uint256 contractTokenBalance = balanceOf(address(this));
-
+        
         if(contractTokenBalance >= _maxTxAmount)
         {
             contractTokenBalance = _maxTxAmount;
         }
-
+        
         bool overMinTokenBalance = contractTokenBalance >= numTokensSellToAddToLiquidity;
         if (
             overMinTokenBalance &&
@@ -1094,15 +1097,15 @@ contract CashCowToken is Context, IERC20, Ownable {
             //add liquidity
             swapAndLiquify(contractTokenBalance);
         }
-
+        
         //indicates if fee should be deducted from transfer
         bool takeFee = true;
-
+        
         //if any account belongs to _isExcludedFromFee account then remove the fee
         if(_isExcludedFromFee[from] || _isExcludedFromFee[to]){
             takeFee = false;
         }
-
+        
         //transfer amount, it will take tax, burn, liquidity fee
         _tokenTransfer(from,to,amount,takeFee);
     }
@@ -1126,7 +1129,7 @@ contract CashCowToken is Context, IERC20, Ownable {
 
         // add liquidity to uniswap
         addLiquidity(otherHalf, newBalance);
-
+        
         emit SwapAndLiquify(half, newBalance, otherHalf);
     }
 
@@ -1167,7 +1170,7 @@ contract CashCowToken is Context, IERC20, Ownable {
     function _tokenTransfer(address sender, address recipient, uint256 amount,bool takeFee) private {
         if(!takeFee)
             removeAllFee();
-
+        
         if (_isExcluded[sender] && !_isExcluded[recipient]) {
             _transferFromExcluded(sender, recipient, amount);
         } else if (!_isExcluded[sender] && _isExcluded[recipient]) {
@@ -1179,7 +1182,7 @@ contract CashCowToken is Context, IERC20, Ownable {
         } else {
             _transferStandard(sender, recipient, amount);
         }
-
+        
         if(!takeFee)
             restoreAllFee();
     }
@@ -1198,7 +1201,7 @@ contract CashCowToken is Context, IERC20, Ownable {
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tLiquidity, uint256 tCharity) = _getValues(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
-        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
+        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);           
         _takeLiquidity(tLiquidity);
         _takeCharity(tCharity);
         _reflectFee(rFee, tFee);
@@ -1209,7 +1212,7 @@ contract CashCowToken is Context, IERC20, Ownable {
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee, uint256 tTransferAmount, uint256 tFee, uint256 tLiquidity, uint256 tCharity) = _getValues(tAmount);
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
-        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
+        _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);   
         _takeLiquidity(tLiquidity);
         _takeCharity(tCharity);
         _reflectFee(rFee, tFee);

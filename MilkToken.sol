@@ -1,5 +1,23 @@
 /**
- *Submitted for verification at BscScan.com on 2021-09-13
+
+                                      /;    ;\
+                                   __  \\____//
+                                  /{_\_/   `'\____
+                                  \___   (o)  (o  }
+       _____________________________/          :--'  
+   ,-,'`@@@@@@@@       @@@@@@         \_    `__\
+  ;:(  @@@@@@@@@        @@@             \___(o'o)
+  :: )  @@@@          @@@@@@        ,'@@(  `===='       
+  :: : @@@@@:          @@@@         `@@@:
+  :: \  @@@@@:       @@@@@@@)    (  '@@@'
+  ;; /\      /`,    @@@@@@@@@\   :@@@@@)
+  ::/  )    {_----------------:  :~`,~~;
+ ;;'`; :   )                  :  / `; ;
+;;;; : :   ;                  :  ;  ; :              
+`'`' / :  :                   :  :  : :
+    )_ \__;      ";"          :_ ;  \_\       `,','
+    :__\  \    * `,'*         \  \  :  \   *  8`;'*  *
+        `^'     \ :/           `^'  `-^-'   \v/ :  \/ 
 */
 
 // SPDX-License-Identifier: MIT
@@ -959,7 +977,7 @@ contract BEP20 is Context, IBEP20, Ownable {
 }
 
 // MilkToken with Governance.
-contract MilkToken is BEP20('Milk Token', 'MILK') {
+contract MilkToken is BEP20('Milk', 'MILK') {
     /// @dev Creates `_amount` token to `_to`. Must only be called by the owner (MasterChef).
     function mint(address _to, uint256 _amount) public onlyOwner {
         _mint(_to, _amount);
